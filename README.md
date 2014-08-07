@@ -32,3 +32,5 @@ All limits are optional and configurable, some even for each call.
 7.1.1 table.contains is such an example, this operation is really fast, but would need a large amount of instructions if done in lua.
 7.1.2 Ability to create instructions costs from java side. For example domain specific function could be given a cost to reduce unnecessary calls to it.
 
+LICENSE:
+The same license as for LUAJ applies according to Sourceforge this is seems to be MIT License (the links are somewhat down)
