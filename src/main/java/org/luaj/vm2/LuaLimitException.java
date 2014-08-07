@@ -1,4 +1,4 @@
-package de.visiongamestudios;
+package org.luaj.vm2;
 
 
 public class LuaLimitException extends RuntimeException {

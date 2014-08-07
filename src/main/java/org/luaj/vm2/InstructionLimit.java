@@ -1,6 +1,5 @@
 package org.luaj.vm2;
 
-import de.visiongamestudios.LuaLimitException;
 
 /**
  * instruction counter
