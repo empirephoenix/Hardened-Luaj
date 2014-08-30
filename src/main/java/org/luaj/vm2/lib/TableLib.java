@@ -21,6 +21,7 @@
  ******************************************************************************/
 package org.luaj.vm2.lib;
 
+import org.luaj.vm2.InstructionLimit;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -79,7 +80,7 @@ public class TableLib extends TwoArgFunction {
 	static class contains extends TableLibFunction {
 		@Override
 		public LuaValue call(final LuaValue list, final LuaValue contains) {
-			Varargs.getInstructionLimit().increase(10);
+			InstructionLimit.instructionLimit().increase(10);
 			list.checktable();
 			final LuaTable table = (LuaTable) list;
 			for (final LuaValue key : table.keys()) {

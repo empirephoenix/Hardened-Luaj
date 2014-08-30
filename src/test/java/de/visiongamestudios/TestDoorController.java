@@ -5,13 +5,13 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import org.luaj.vm2.Globals;
+import org.luaj.vm2.InstructionLimit;
 import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
 
-public class Test {
+public class TestDoorController {
 	public static void main(final String[] args) throws FileNotFoundException, InterruptedException {
 		final Globals globals = HardenedGlobals.standardGlobals();
 
@@ -42,13 +42,15 @@ public class Test {
 		System.out.println(script);
 
 		final LuaClosure chunk = (LuaClosure) globals.load(script.toString(), 500);
-		Varargs.getInstructionLimit().setMaxInstructions(50);
-		Varargs.getInstructionLimit().setMaxStringSize(100);
-		Varargs.getInstructionLimit().reset();
+
+		final InstructionLimit limit = new InstructionLimit();
+		limit.setMaxInstructions(50);
+		limit.setMaxStringSize(100);
+		InstructionLimit.instructionLimit(limit);
 
 		chunk.call();
 
-		Varargs.getInstructionLimit().reset();
+		InstructionLimit.reset();
 		final LuaClosure openDoorHook = (LuaClosure) globals.get("canOpenDoor");
 		final LuaClosure tickHook = (LuaClosure) globals.get("tick");
 
@@ -88,11 +90,10 @@ public class Test {
 			Thread.sleep(50);
 			final int mb = 1024 * 1024;
 			final Runtime runtime = Runtime.getRuntime();
-
 			final long start = System.currentTimeMillis();
-			Varargs.getInstructionLimit().reset();
 			tickHook.call();
-			System.out.println("Took " + (System.currentTimeMillis() - start) + " Instructions " + Varargs.getInstructionLimit().getCurrentInstructions() + "  Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+			System.out.println("Took " + (System.currentTimeMillis() - start) + " Instructions " + InstructionLimit.instructionLimit().getCurrentInstructions() + "  Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+			InstructionLimit.reset();
 		}
 	}
 }
