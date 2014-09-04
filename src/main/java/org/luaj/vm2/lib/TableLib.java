@@ -234,7 +234,7 @@ public class TableLib extends TwoArgFunction {
 				formatting.append(":");
 				if (v.istable()) {
 					System.out.println(formatting);
-					this.call(v, LuaValue.valueOf(indent.toint() + 1));
+					this.recursiv(LuaValue.valueOf(indent.toint() + 1), v, visited);
 				} else {
 					formatting.append(v);
 					System.out.println(formatting);
