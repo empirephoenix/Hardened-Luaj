@@ -70,6 +70,7 @@ public class TableLib extends TwoArgFunction {
 		table.set("pack", new pack());
 		table.set("remove", new remove());
 		table.set("sort", new sort());
+		table.set("print", new print());
 		table.set("getn", new getn());
 		table.set("unpack", new unpack());
 		table.set("contains", new contains());
@@ -201,4 +202,37 @@ public class TableLib extends TwoArgFunction {
 			}
 		}
 	}
+
+	static class print extends TwoArgFunction {
+		@Override
+		public LuaValue call(final LuaValue table, LuaValue indent) {
+			table.checktable();
+			if (indent.isnil()) {
+				indent = LuaValue.valueOf(0);
+			}
+			final LuaTable ctable = (LuaTable) table;
+			final LuaValue[] allKeys = ctable.keys();
+			for (int kid = 0; kid < allKeys.length; kid++) {
+				final LuaValue k = allKeys[kid];
+				final LuaValue v = ctable.get(allKeys[kid]);
+				final StringBuilder formatting = new StringBuilder();
+				for (int indentc = 0; indentc < indent.toint(); indentc++) {
+					formatting.append("\t");
+				}
+				formatting.append(k);
+				formatting.append(":");
+				if (v.istable()) {
+					System.out.println(formatting);
+					this.call(v, LuaValue.valueOf(indent.toint() + 1));
+				} else {
+					formatting.append(v);
+					System.out.println(formatting);
+				}
+
+			}
+			return null;
+		}
+
+	}
+
 }
