@@ -219,7 +219,7 @@ public class PackageLib extends TwoArgFunction {
 			} else if ((result = loaded.get(name)) == PackageLib._SENTINEL) {
 				loaded.set(name, result = LuaValue.TRUE);
 			}
-			return LuaValue.varargsOf(result, loaded.arg1());
+			return LuaValue.varargsOf(result, loader.arg1());
 		}
 	}
 
