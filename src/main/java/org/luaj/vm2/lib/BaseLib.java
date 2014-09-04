@@ -99,8 +99,9 @@ public abstract class BaseLib extends TwoArgFunction implements ResourceFinder {
 		env.set("tostring", new tostring());
 		env.set("type", new type());
 		env.set("xpcall", new xpcall());
-		next next;
-		env.set("next", next = new next());
+
+		final next next = new next();
+		env.set("next", next);
 		env.set("pairs", new pairs(next));
 		env.set("ipairs", new ipairs());
 

@@ -104,8 +104,7 @@ import org.luaj.vm2.lib.ResourceFinder;
  * <li>"_VERSION" String containing the version of luaj.
  * </ul>
  * 
- * <h3>Use in Multithreaded Environments</h3> In a multi-threaded server environment, each server thread should create one Globals instance, which will be logically distinct and not interfere with each other, but share certain static immutable
- * resources such as class data and string data.
+ * <h3>Use in Multithreaded Environments</h3> In a multi-threaded server environment, each server thread should create one Globals instance, which will be logically distinct and not interfere with each other, but share certain static immutable resources such as class data and string data.
  * <p>
  * 
  * @see org.luaj.vm2.lib.jse.JsePlatform
@@ -190,7 +189,7 @@ public class Globals extends LuaTable {
 	public Undumper	undumper;
 
 	/**
-	 * Convenience function for loading a file that is either binary lua or lua source.
+	 * Convenience function for loading a file that is lua source.
 	 * 
 	 * @param filename
 	 *            Name of the file to load.
@@ -200,7 +199,7 @@ public class Globals extends LuaTable {
 	 */
 	public LuaValue loadfile(final String filename) {
 		try {
-			return this.load(this.finder.findResource(filename), "@" + filename, "bt", this);
+			return this.load(this.finder.findResource(filename), "@" + filename, "t", this);
 		} catch (final Exception e) {
 			return LuaValue.error("load " + filename + ": " + e);
 		}
@@ -258,19 +257,21 @@ public class Globals extends LuaTable {
 	}
 
 	/**
-	 * Load lua source or lua binary from an input stream into a Prototype. The InputStream is either a binary lua chunk starting with the lua binary chunk signature, or a text input file. If it is a text input file, it is interpreted as a UTF-8 byte
-	 * sequence.
+	 * Load lua source or lua binary from an input stream into a Prototype. The InputStream is either a binary lua chunk starting with the lua binary chunk signature, or a text input file. If it is a text input file, it is interpreted as a UTF-8 byte sequence.
 	 */
 	public Prototype loadPrototype(InputStream is, final String chunkname, final String mode) throws IOException {
 		if (mode.indexOf('b') >= 0) {
-			if (this.undumper == null)
+			if (this.undumper == null) {
 				LuaValue.error("No undumper.");
-			if (!is.markSupported())
+			}
+			if (!is.markSupported()) {
 				is = new BufferedStream(is);
+			}
 			is.mark(4);
 			final Prototype p = this.undumper.undump(is, chunkname);
-			if (p != null)
+			if (p != null) {
 				return p;
+			}
 			is.reset();
 		}
 		if (mode.indexOf('t') >= 0) {
@@ -291,8 +292,9 @@ public class Globals extends LuaTable {
 	 * Compile lua source from an InputStream into a Prototype. The input is assumed to be UTf-8, but since bytes in the range 128-255 are passed along as literal bytes, any ASCII-compatible encoding such as ISO 8859-1 may also be used.
 	 */
 	public Prototype compilePrototype(final InputStream stream, final String chunkname) throws IOException {
-		if (this.compiler == null)
+		if (this.compiler == null) {
 			LuaValue.error("No compiler.");
+		}
 		return this.compiler.compile(stream, chunkname);
 	}
 
@@ -304,8 +306,9 @@ public class Globals extends LuaTable {
 	 * @return Values supplied as arguments to the resume() call that reactivates this thread.
 	 */
 	public Varargs yield(final Varargs args) {
-		if (this.running == null || this.running.isMainThread())
+		if (this.running == null || this.running.isMainThread()) {
 			throw new LuaError("cannot yield main thread");
+		}
 		final LuaThread.State s = this.running.state;
 		return s.lua_yield(args);
 	}
@@ -334,8 +337,9 @@ public class Globals extends LuaTable {
 		@Override
 		public int read(final char[] cbuf, final int off, final int len) throws IOException {
 			int j = 0;
-			for (; j < len && this.i < this.n; ++j, ++this.i)
+			for (; j < len && this.i < this.n; ++j, ++this.i) {
 				cbuf[off + j] = this.s.charAt(this.i);
+			}
 			return j > 0 || len == 0 ? j : -1;
 		}
 	}
@@ -356,7 +360,7 @@ public class Globals extends LuaTable {
 		@Override
 		public int read() throws IOException {
 			final int a = this.avail();
-			return (a <= 0 ? -1 : 0xff & this.b[this.i++]);
+			return a <= 0 ? -1 : 0xff & this.b[this.i++];
 		}
 
 		@Override
@@ -367,8 +371,9 @@ public class Globals extends LuaTable {
 		@Override
 		public int read(final byte[] b, final int i0, final int n) throws IOException {
 			final int a = this.avail();
-			if (a <= 0)
+			if (a <= 0) {
 				return -1;
+			}
 			final int n_read = Math.min(a, n);
 			System.arraycopy(this.b, this.i, b, i0, n_read);
 			this.i += n_read;
@@ -402,15 +407,18 @@ public class Globals extends LuaTable {
 
 		@Override
 		protected int avail() throws IOException {
-			if (this.i < this.j)
+			if (this.i < this.j) {
 				return this.j - this.i;
+			}
 			int n = this.r.read(this.c);
-			if (n < 0)
+			if (n < 0) {
 				return -1;
+			}
 			if (n == 0) {
 				final int u = this.r.read();
-				if (u < 0)
+				if (u < 0) {
 					return -1;
+				}
 				this.c[0] = (char) u;
 				n = 1;
 			}
@@ -425,8 +433,7 @@ public class Globals extends LuaTable {
 	}
 
 	/**
-	 * Simple buffered InputStream that supports mark. Used to examine an InputStream for a 4-byte binary lua signature, and fall back to text input when the signature is not found, as well as speed up normal compilation and reading of lua scripts.
-	 * This class may be moved to its own package in the future.
+	 * Simple buffered InputStream that supports mark. Used to examine an InputStream for a 4-byte binary lua signature, and fall back to text input when the signature is not found, as well as speed up normal compilation and reading of lua scripts. This class may be moved to its own package in the future.
 	 */
 	static class BufferedStream extends AbstractBufferedStream {
 		private final InputStream	s;
@@ -442,18 +449,22 @@ public class Globals extends LuaTable {
 
 		@Override
 		protected int avail() throws IOException {
-			if (this.i < this.j)
+			if (this.i < this.j) {
 				return this.j - this.i;
-			if (this.j >= this.b.length)
+			}
+			if (this.j >= this.b.length) {
 				this.i = this.j = 0;
+			}
 			// leave previous bytes in place to implement mark()/reset().
 			int n = this.s.read(this.b, this.j, this.b.length - this.j);
-			if (n < 0)
+			if (n < 0) {
 				return -1;
+			}
 			if (n == 0) {
 				final int u = this.s.read();
-				if (u < 0)
+				if (u < 0) {
 					return -1;
+				}
 				this.b[this.j] = (byte) u;
 				n = 1;
 			}
