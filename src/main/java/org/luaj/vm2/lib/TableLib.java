@@ -80,7 +80,8 @@ public class TableLib extends TwoArgFunction {
 	static class contains extends TableLibFunction {
 		@Override
 		public LuaValue call(final LuaValue list, final LuaValue contains) {
-			InstructionLimit.instructionLimit().increase(10);
+			InstructionLimit.instructionLimit();
+			InstructionLimit.increase(10);
 			list.checktable();
 			final LuaTable table = (LuaTable) list;
 			for (final LuaValue key : table.keys()) {
@@ -93,14 +94,6 @@ public class TableLib extends TwoArgFunction {
 		}
 	}
 
-	// function table.contains(table, element)
-	// for _, value in pairs(table) do
-	// if value == element then
-	// return true
-	// end
-	// end
-	// return false
-	// end
 	static class TableLibFunction extends LibFunction {
 		@Override
 		public LuaValue call() {
