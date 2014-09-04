@@ -1,7 +1,9 @@
 package de.visiongamestudios;
+
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.Bit32Lib;
+import org.luaj.vm2.lib.CoroutineLib;
 import org.luaj.vm2.lib.PackageLib;
 import org.luaj.vm2.lib.StringLib;
 import org.luaj.vm2.lib.TableLib;
@@ -19,6 +21,7 @@ public class HardenedGlobals {
 		globals.load(new JseMathLib());
 		globals.load(new RestrictedOsLib());
 		globals.load(new DebugLib());
+		globals.load(new CoroutineLib());
 		LuaC.install(globals);
 		return globals;
 	}

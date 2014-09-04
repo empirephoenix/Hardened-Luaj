@@ -53,17 +53,15 @@ public class TestLongRunningTask {
 			final int mb = 1024 * 1024;
 			final Runtime runtime = Runtime.getRuntime();
 			final long start = System.currentTimeMillis();
-			final Varargs returnValue = tickWorker.resume(LuaValue.NIL); // tick 1 is expected to be immidiatly put to sleep
+			final Varargs returnValue = tickWorker.resume(LuaValue.NIL);
 			System.out.println("Took " + (System.currentTimeMillis() - start) + " Instructions " + coroutineInstructionLimit.getCurrentInstructions() + "  Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
 
 			final LuaValue processedWithoutError = returnValue.arg(1);
 			if (processedWithoutError.isboolean() && !((LuaBoolean) processedWithoutError).v) {
 				System.out.println("Terminating long running Task due to error " + returnValue.arg(2));
 				break;
-			} else {
-				InstructionLimit.reset(tickWorker);
 			}
-
+			InstructionLimit.reset(tickWorker);
 		}
 	}
 }

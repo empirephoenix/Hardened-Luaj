@@ -3,5 +3,6 @@ function tick()
   while true do
     tickcount = tickcount +1;
     print("inner loop " .. tickcount);
+    coroutine.yield(); --optional early release
   end
 end

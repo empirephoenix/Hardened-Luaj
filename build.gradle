@@ -17,7 +17,7 @@ compileJava.options.encoding = 'UTF-8'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 
-version = "1."+gitTimestamp+"."+ gitRevision
+version = "1.0.0-SNAPSHOT"
 group = "org.hardluaj"
 
 
