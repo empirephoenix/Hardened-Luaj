@@ -70,6 +70,7 @@ public class TableLib extends TwoArgFunction {
 		table.set("pack", new pack());
 		table.set("remove", new remove());
 		table.set("sort", new sort());
+		table.set("getn", new getn());
 		table.set("unpack", new unpack());
 		table.set("contains", new contains());
 		env.set("table", table);
@@ -164,6 +165,15 @@ public class TableLib extends TwoArgFunction {
 		@Override
 		public LuaValue call(final LuaValue list, final LuaValue pos) {
 			return list.checktable().remove(pos.checkint());
+		}
+	}
+
+	// "sort" (table [, comp])
+	static class getn extends OneArgFunction {
+		@Override
+		public LuaValue call(final LuaValue table) {
+			table.checktable();
+			return table.len();
 		}
 	}
 
