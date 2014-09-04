@@ -550,8 +550,10 @@ public class Globals extends LuaTable {
 			size += casted.p.code.length * 4;
 
 			// stackvalue size
-			for (final LuaValue stackValue : casted.getCurrentStack()) {
-				size += this.getSizeOfObject(stackValue, visited);
+			if (casted.getCurrentStack() != null) {
+				for (final LuaValue stackValue : casted.getCurrentStack()) {
+					size += this.getSizeOfObject(stackValue, visited);
+				}
 			}
 			return size;
 		} else if (value instanceof LibFunction) {
