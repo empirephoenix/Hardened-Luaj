@@ -19,6 +19,8 @@ import org.luaj.vm2.Varargs;
  *
  */
 public class TestLongRunningTask {
+	private static int	lastMemory;
+
 	public static void main(final String[] args) throws FileNotFoundException, InterruptedException {
 		final Globals globals = HardenedGlobals.standardGlobals();
 
@@ -45,7 +47,7 @@ public class TestLongRunningTask {
 		final LuaThread tickWorker = new LuaThread(globals, tickHook.checkfunction());
 		tickWorker.resume(LuaValue.NIL); // tick 1 is expected to be immidiatly put to sleep,as no limits are yet configured
 		final InstructionLimit coroutineInstructionLimit = InstructionLimit.instructionLimit(tickWorker);
-		coroutineInstructionLimit.setMaxInstructions(50);
+		coroutineInstructionLimit.setMaxInstructions(500);
 		coroutineInstructionLimit.setMaxStringSize(100);
 
 		while (true) {
@@ -53,9 +55,12 @@ public class TestLongRunningTask {
 			final int mb = 1024 * 1024;
 			final Runtime runtime = Runtime.getRuntime();
 			final long start = System.currentTimeMillis();
-			final Varargs returnValue = tickWorker.resume(LuaValue.NIL);
+			final Varargs returnValue = tickWorker.resume(LuaValue.NIL); // tick 1 is expected to be immidiatly put to sleep
+			final int newMemory = globals.getUsedMemory();
+			final int memoryGrowth = newMemory - TestLongRunningTask.lastMemory;
+			TestLongRunningTask.lastMemory = newMemory;
+			System.out.println("Used Memory " + TestLongRunningTask.lastMemory + " " + (memoryGrowth > 0 ? "+" + memoryGrowth : memoryGrowth));
 			System.out.println("Took " + (System.currentTimeMillis() - start) + " Instructions " + coroutineInstructionLimit.getCurrentInstructions() + "  Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
-
 			final LuaValue processedWithoutError = returnValue.arg(1);
 			if (processedWithoutError.isboolean() && !((LuaBoolean) processedWithoutError).v) {
 				System.out.println("Terminating long running Task due to error " + returnValue.arg(2));

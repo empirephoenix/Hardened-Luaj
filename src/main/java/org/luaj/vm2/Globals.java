@@ -25,10 +25,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Reader;
+import java.util.HashSet;
 
 import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.BaseLib;
 import org.luaj.vm2.lib.DebugLib;
+import org.luaj.vm2.lib.LibFunction;
 import org.luaj.vm2.lib.PackageLib;
 import org.luaj.vm2.lib.ResourceFinder;
 
@@ -484,5 +486,68 @@ public class Globals extends LuaTable {
 		public synchronized void reset() throws IOException {
 			this.i = 0;
 		}
+	}
+
+	public int getUsedMemory() {
+		final int totalsize = 0;
+		final HashSet<LuaValue> visited = new HashSet<>();
+		return this.getSizeOfObject(this, visited);
+	}
+
+	private int getSizeOfObject(final LuaValue value, final HashSet<LuaValue> visited) {
+		if (value == null || visited.contains(value)) {
+			return 0;
+		}
+		visited.add(value);
+		if (value instanceof LuaInteger) {
+			return 4;
+		} else if (value instanceof LuaDouble) {
+			return 8;
+		} else if (value instanceof LuaBoolean) {
+			return 1;
+		} else if (value instanceof LuaNil) {
+			return 0;
+		} else if (value instanceof LuaString) {
+			final LuaString casted = (LuaString) value;
+			return casted.m_length;
+		} else if (value instanceof LuaTable) {
+			final LuaTable casted = (LuaTable) value;
+			int size = 0;
+			for (final LuaValue key : casted.keys()) {
+				final LuaValue childValue = casted.get(key);
+				size += this.getSizeOfObject(childValue, visited);
+			}
+			return size;
+		} else if (value instanceof LuaClosure) {
+			int size = 0;
+			final LuaClosure casted = (LuaClosure) value;
+
+			// upvalue size
+			for (final UpValue uValue : casted.upValues) {
+				for (final LuaValue uaValue : uValue.array) {
+					size += this.getSizeOfObject(uaValue, visited);
+				}
+			}
+
+			// global PK size
+			size += this.getSizeOfObject(casted.globals, visited);
+			for (final LuaValue kValue : casted.p.k) {
+				size += this.getSizeOfObject(kValue, visited);
+			}
+
+			// instruction size
+			size += casted.p.code.length * 4;
+
+			// stackvalue size
+			for (final LuaValue stackValue : casted.getCurrentStack()) {
+				size += this.getSizeOfObject(stackValue, visited);
+			}
+			return size;
+		} else if (value instanceof LibFunction) {
+			return 10;
+		} else {
+			System.out.println("Unknown type " + value.getClass());
+		}
+		return 0;
 	}
 }
