@@ -177,18 +177,18 @@ public class PackageLib extends TwoArgFunction {
 	 * 
 	 * If there is any error loading or running the module, or if it cannot find any loader for the module, then require raises an error.
 	 */
-	public class require extends VarArgFunction {
+	public class require extends OneArgFunction {
 		@Override
-		public Varargs invoke(final Varargs arg) {
+		public LuaValue call(final LuaValue arg) {
 
-			final LuaString name = arg.checkstring(1);
+			final LuaString name = arg.checkstring();
 			final LuaValue loaded = PackageLib.this.package_.get(PackageLib._LOADED);
 			LuaValue result = loaded.get(name);
 			if (result.toboolean()) {
 				if (result == PackageLib._SENTINEL) {
 					LuaValue.error("loop or previous error loading module '" + name + "'");
 				}
-				return LuaValue.varargsOf(result, LuaValue.NIL);
+				return result;
 			}
 
 			/* else must load it; iterate over available loaders */
@@ -219,7 +219,7 @@ public class PackageLib extends TwoArgFunction {
 			} else if ((result = loaded.get(name)) == PackageLib._SENTINEL) {
 				loaded.set(name, result = LuaValue.TRUE);
 			}
-			return LuaValue.varargsOf(result, loader.arg1());
+			return result;
 		}
 	}
 
