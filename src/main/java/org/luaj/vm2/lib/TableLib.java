@@ -21,6 +21,8 @@
  ******************************************************************************/
 package org.luaj.vm2.lib;
 
+import java.util.HashSet;
+
 import org.luaj.vm2.InstructionLimit;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
@@ -206,11 +208,20 @@ public class TableLib extends TwoArgFunction {
 	static class print extends TwoArgFunction {
 		@Override
 		public LuaValue call(final LuaValue table, LuaValue indent) {
-			table.checktable();
 			if (indent.isnil()) {
 				indent = LuaValue.valueOf(0);
 			}
-			final LuaTable ctable = (LuaTable) table;
+			this.recursiv(indent, table.checktable(), new HashSet<LuaValue>());
+			return null;
+		}
+
+		public void recursiv(final LuaValue indent, final LuaTable table, final HashSet<LuaValue> visited) {
+			if (visited.contains(table)) {
+				return;
+			}
+			visited.add(table);
+
+			final LuaTable ctable = table;
 			final LuaValue[] allKeys = ctable.keys();
 			for (int kid = 0; kid < allKeys.length; kid++) {
 				final LuaValue k = allKeys[kid];
@@ -230,7 +241,6 @@ public class TableLib extends TwoArgFunction {
 				}
 
 			}
-			return null;
 		}
 
 	}
