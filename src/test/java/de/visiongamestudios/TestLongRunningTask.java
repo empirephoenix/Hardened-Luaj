@@ -39,7 +39,6 @@ public class TestLongRunningTask {
 
 		final InstructionLimit initializerLimit = new InstructionLimit();
 		initializerLimit.setMaxInstructions(50);
-		initializerLimit.setMaxStringSize(100);
 		InstructionLimit.instructionLimit(initializerLimit);
 		chunk.call();
 
@@ -48,7 +47,6 @@ public class TestLongRunningTask {
 		tickWorker.resume(LuaValue.NIL); // tick 1 is expected to be immidiatly put to sleep,as no limits are yet configured
 		final InstructionLimit coroutineInstructionLimit = InstructionLimit.instructionLimit(tickWorker);
 		coroutineInstructionLimit.setMaxInstructions(500);
-		coroutineInstructionLimit.setMaxStringSize(100);
 
 		while (true) {
 			Thread.sleep(50);

@@ -14,7 +14,6 @@ public class InstructionLimit {
 
 	private int													currentInstructions;
 	private int													maxInstructions;
-	private int													maxStringSize;
 
 	/**
 	 * returns the threadlocal instructions counter
@@ -55,14 +54,6 @@ public class InstructionLimit {
 
 	public int getCurrentInstructions() {
 		return this.currentInstructions;
-	}
-
-	public int maxStringSize() {
-		return this.maxStringSize;
-	}
-
-	public void setMaxStringSize(final int maxStringSize) {
-		this.maxStringSize = maxStringSize;
 	}
 
 	public static boolean reset() {
