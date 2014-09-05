@@ -372,9 +372,6 @@ public class LuaClosure extends LuaFunction {
 					stack[a] = stack[c - 1].concat(stack[c]);
 				}
 			}
-			if (stack[a].length() > InstructionLimit.instructionLimit().maxStringSize()) {
-				throw new RuntimeException("Oversized string " + stack[a].length() + "/" + InstructionLimit.instructionLimit().maxStringSize());
-			}
 			continue;
 
 		case Lua.OP_JMP: /* sBx pc+=sBx */

@@ -45,7 +45,6 @@ public class TestDoorController {
 
 		final InstructionLimit limit = new InstructionLimit();
 		limit.setMaxInstructions(50);
-		limit.setMaxStringSize(100);
 		InstructionLimit.instructionLimit(limit);
 
 		chunk.call();
