@@ -93,7 +93,7 @@ public class StringLib extends TwoArgFunction {
 			final String[] parts = string.split(regex);
 			final LuaTable rv = new LuaTable();
 			for (int i = 0; i < parts.length; i++) {
-				rv.set(LuaValue.valueOf(i), LuaValue.valueOf(parts[i]));
+				rv.set(LuaValue.valueOf(i + 1), LuaValue.valueOf(parts[i]));
 			}
 			return rv;
 		}
