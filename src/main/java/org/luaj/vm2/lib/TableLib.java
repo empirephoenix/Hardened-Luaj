@@ -212,20 +212,16 @@ public class TableLib extends TwoArgFunction {
 		}
 	}
 
-	class print extends ThreeArgFunction {
+	class print extends TwoArgFunction {
 		@Override
-		public LuaValue call(final LuaValue table, LuaValue indent, LuaValue maxindent) {
-			if (indent.isnil()) {
-				indent = LuaValue.valueOf(0);
-			}
+		public LuaValue call(final LuaValue table, LuaValue maxindent) {
 			if (maxindent.isnil()) {
 				maxindent = LuaValue.valueOf(50);
 			}
-			final int jindent = indent.toint();
 			final int jmaxindent = maxindent.toint();
 
 			// resolve out as late as possible
-			this.recursiv(jindent, table.checktable(), new HashSet<LuaValue>(), TableLib.this.globals.STDOUT, jmaxindent);
+			this.recursiv(0, table.checktable(), new HashSet<LuaValue>(), TableLib.this.globals.STDOUT, jmaxindent);
 			return null;
 		}
 
