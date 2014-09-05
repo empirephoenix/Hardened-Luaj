@@ -21,8 +21,10 @@
  ******************************************************************************/
 package org.luaj.vm2.lib;
 
+import java.io.PrintStream;
 import java.util.HashSet;
 
+import org.luaj.vm2.Globals;
 import org.luaj.vm2.InstructionLimit;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
@@ -63,6 +65,11 @@ import org.luaj.vm2.Varargs;
  * @see <a href="http://www.lua.org/manual/5.2/manual.html#6.5">Lua 5.2 Table Lib Reference</a>
  */
 public class TableLib extends TwoArgFunction {
+	private Globals	globals;
+
+	public TableLib(final Globals globals) {
+		this.globals = globals;
+	}
 
 	@Override
 	public LuaValue call(final LuaValue modname, final LuaValue env) {
@@ -205,17 +212,22 @@ public class TableLib extends TwoArgFunction {
 		}
 	}
 
-	static class print extends TwoArgFunction {
+	class print extends TwoArgFunction {
+
+		public print() {
+		}
+
 		@Override
 		public LuaValue call(final LuaValue table, LuaValue indent) {
 			if (indent.isnil()) {
 				indent = LuaValue.valueOf(0);
 			}
-			this.recursiv(indent, table.checktable(), new HashSet<LuaValue>());
+			// resolve out as late as possible
+			this.recursiv(indent, table.checktable(), new HashSet<LuaValue>(), TableLib.this.globals.STDOUT);
 			return null;
 		}
 
-		public void recursiv(final LuaValue indent, final LuaTable table, final HashSet<LuaValue> visited) {
+		public void recursiv(final LuaValue indent, final LuaTable table, final HashSet<LuaValue> visited, final PrintStream out) {
 			if (visited.contains(table)) {
 				return;
 			}
@@ -233,11 +245,11 @@ public class TableLib extends TwoArgFunction {
 				formatting.append(k);
 				formatting.append(":");
 				if (v.istable()) {
-					System.out.println(formatting);
-					this.recursiv(LuaValue.valueOf(indent.toint() + 1), v.checktable(), visited);
+					out.println(formatting);
+					this.recursiv(LuaValue.valueOf(indent.toint() + 1), v.checktable(), visited, out);
 				} else {
 					formatting.append(v);
-					System.out.println(formatting);
+					out.println(formatting);
 				}
 
 			}

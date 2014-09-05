@@ -16,7 +16,7 @@ public class HardenedGlobals {
 		globals.load(new JseBaseLib());
 		globals.load(new PackageLib());
 		globals.load(new Bit32Lib());
-		globals.load(new TableLib());
+		globals.load(new TableLib(globals));
 		globals.load(new StringLib());
 		globals.load(new JseMathLib());
 		globals.load(new RestrictedOsLib());
