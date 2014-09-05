@@ -212,26 +212,32 @@ public class TableLib extends TwoArgFunction {
 		}
 	}
 
-	class print extends TwoArgFunction {
-
-		public print() {
-		}
-
+	class print extends ThreeArgFunction {
 		@Override
-		public LuaValue call(final LuaValue table, LuaValue indent) {
+		public LuaValue call(final LuaValue table, LuaValue indent, LuaValue maxindent) {
 			if (indent.isnil()) {
 				indent = LuaValue.valueOf(0);
 			}
+			if (maxindent.isnil()) {
+				maxindent = LuaValue.valueOf(50);
+			}
+			final int jindent = indent.toint();
+			final int jmaxindent = maxindent.toint();
+
 			// resolve out as late as possible
-			this.recursiv(indent, table.checktable(), new HashSet<LuaValue>(), TableLib.this.globals.STDOUT);
+			this.recursiv(jindent, table.checktable(), new HashSet<LuaValue>(), TableLib.this.globals.STDOUT, jmaxindent);
 			return null;
 		}
 
-		public void recursiv(final LuaValue indent, final LuaTable table, final HashSet<LuaValue> visited, final PrintStream out) {
+		public void recursiv(final int indent, final LuaTable table, final HashSet<LuaValue> visited, final PrintStream out, final int maxindent) {
 			if (visited.contains(table)) {
 				return;
 			}
 			visited.add(table);
+
+			if (indent > maxindent) {
+				return;
+			}
 
 			final LuaTable ctable = table;
 			final LuaValue[] allKeys = ctable.keys();
@@ -239,14 +245,14 @@ public class TableLib extends TwoArgFunction {
 				final LuaValue k = allKeys[kid];
 				final LuaValue v = ctable.get(allKeys[kid]);
 				final StringBuilder formatting = new StringBuilder();
-				for (int indentc = 0; indentc < indent.toint(); indentc++) {
+				for (int indentc = 0; indentc < indent; indentc++) {
 					formatting.append("\t");
 				}
 				formatting.append(k);
 				formatting.append(":");
 				if (v.istable()) {
 					out.println(formatting);
-					this.recursiv(LuaValue.valueOf(indent.toint() + 1), v.checktable(), visited, out);
+					this.recursiv(indent + 1, v.checktable(), visited, out, maxindent);
 				} else {
 					formatting.append(v);
 					out.println(formatting);
