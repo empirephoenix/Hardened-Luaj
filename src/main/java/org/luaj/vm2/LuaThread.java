@@ -66,9 +66,6 @@ public class LuaThread extends LuaValue {
 
 	public static final int			MAX_CALLSTACK					= 256;
 
-	/** Interval to check for LuaThread dereferencing. */
-	public static int				GC_INTERVAL						= 30000;
-
 	/**
 	 * Thread-local used by DebugLib to store debugging state. This is ano opaque value that should not be modified by applications.
 	 */

@@ -81,6 +81,7 @@ public class TableLib extends TwoArgFunction {
 		table.set("sort", new sort());
 		table.set("print", new print());
 		table.set("getn", new getn());
+		table.set("clear", new clear());
 		table.set("unpack", new unpack());
 		table.set("contains", new contains());
 		env.set("table", table);
@@ -102,6 +103,20 @@ public class TableLib extends TwoArgFunction {
 				}
 			}
 			return LuaValue.FALSE;
+		}
+	}
+
+	static class clear extends OneArgFunction {
+
+		@Override
+		public LuaValue call(final LuaValue arg) {
+			final LuaTable table = arg.checktable();
+			final LuaValue[] allKeys = table.keys();
+			for (int kid = 0; kid < allKeys.length; kid++) {
+				final LuaValue k = allKeys[kid];
+				table.set(k, LuaValue.NIL);
+			}
+			return LuaValue.NIL;
 		}
 	}
 
