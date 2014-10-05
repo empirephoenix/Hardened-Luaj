@@ -31,8 +31,10 @@ package org.luaj.vm2;
 public class LuaProxy<Type> extends LuaTable {
 	private Type	userData;
 
-	public LuaProxy() {
+	/** Construct empty table */
+	public LuaProxy(final Type userdata) {
 		super();
+		this.userData = userdata;
 	}
 
 	/**
