@@ -106,4 +106,24 @@ public class LuaProxy<Type> extends LuaTable {
 	public void setUserData(final Type userData) {
 		this.userData = userData;
 	}
+
+	@Override
+	public Object checkuserdata() {
+		return this.userData;
+	}
+
+	@Override
+	public Object checkuserdata(final int i) {
+		return super.checkuserdata(i);
+	}
+
+	@Override
+	public Object checkuserdata(final int i, final Class c) {
+		return super.checkuserdata(i, c);
+	}
+
+	@Override
+	public int type() {
+		return LuaValue.TTABLE;
+	}
 }
