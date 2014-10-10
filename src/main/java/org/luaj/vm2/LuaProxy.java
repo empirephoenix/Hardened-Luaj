@@ -107,6 +107,14 @@ public class LuaProxy<Type> extends LuaTable {
 		this.userData = userData;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object checkuserdata(final Class c) {
+		if (c.isAssignableFrom(this.userData.getClass()))
+			return this.userData;
+		return this.typerror(c.getName());
+	}
+
 	@Override
 	public Object checkuserdata() {
 		return this.userData;
