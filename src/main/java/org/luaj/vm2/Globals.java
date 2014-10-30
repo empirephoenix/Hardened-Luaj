@@ -26,7 +26,9 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.util.HashSet;
+import java.util.Queue;
 
+import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.BaseLib;
 import org.luaj.vm2.lib.DebugLib;
@@ -118,16 +120,9 @@ import org.luaj.vm2.lib.ResourceFinder;
  * @see LuaJC
  */
 public class Globals extends LuaTable {
-
-	/** The current default input stream. */
-	public InputStream		STDIN	= null;
-
-	/** The current default output stream. */
-	public PrintStream		STDOUT	= System.out;
-
-	/** The current default error stream. */
-	public PrintStream		STDERR	= System.err;
-
+	
+	public CircularFifoQueue<String> consoleQueue = new CircularFifoQueue<String>(64);
+	
 	/** The installed ResourceFinder for looking files by name. */
 	public ResourceFinder	finder;
 

@@ -21,7 +21,6 @@
  ******************************************************************************/
 package org.luaj.vm2.lib;
 
-import java.io.PrintStream;
 import java.util.HashSet;
 
 import org.luaj.vm2.Globals;
@@ -65,7 +64,16 @@ import org.luaj.vm2.Varargs;
  * @see <a href="http://www.lua.org/manual/5.2/manual.html#6.5">Lua 5.2 Table Lib Reference</a>
  */
 public class TableLib extends TwoArgFunction {
-	private Globals	globals;
+	private static final concat CONCAT_FUNCTION = new concat();
+	private static final insert INSERT_FUNCTION = new insert();
+	private static final pack PACK_FUNCTION = new pack();
+	private static final remove REMOVE_FUNCTION = new remove();
+	private static final sort SORT_FUNCTION = new sort();
+	private static final getn GETN_FUNCTION = new getn();
+	private static final clear CLEAR_FUNCTION = new clear();
+	private static final unpack UNPACK_FUNCTION = new unpack();
+	private static final contains CONTAINS_FUNCTION = new contains();
+	private Globals globals;
 
 	public TableLib(final Globals globals) {
 		this.globals = globals;
@@ -74,16 +82,16 @@ public class TableLib extends TwoArgFunction {
 	@Override
 	public LuaValue call(final LuaValue modname, final LuaValue env) {
 		final LuaTable table = new LuaTable();
-		table.set("concat", new concat());
-		table.set("insert", new insert());
-		table.set("pack", new pack());
-		table.set("remove", new remove());
-		table.set("sort", new sort());
+		table.set("concat", CONCAT_FUNCTION);
+		table.set("insert", INSERT_FUNCTION);
+		table.set("pack", PACK_FUNCTION);
+		table.set("remove", REMOVE_FUNCTION);
+		table.set("sort", SORT_FUNCTION);
 		table.set("print", new print());
-		table.set("getn", new getn());
-		table.set("clear", new clear());
-		table.set("unpack", new unpack());
-		table.set("contains", new contains());
+		table.set("getn", GETN_FUNCTION);
+		table.set("clear", CLEAR_FUNCTION);
+		table.set("unpack", UNPACK_FUNCTION);
+		table.set("contains", CONTAINS_FUNCTION);
 		env.set("table", table);
 		env.get("package").get("loaded").set("table", table);
 		return LuaValue.NIL;
@@ -236,11 +244,11 @@ public class TableLib extends TwoArgFunction {
 			final int jmaxindent = maxindent.toint();
 
 			// resolve out as late as possible
-			this.recursiv(0, table.checktable(), new HashSet<LuaValue>(), TableLib.this.globals.STDOUT, jmaxindent);
+			this.recursiv(0, table.checktable(), new HashSet<LuaValue>(), jmaxindent);
 			return null;
 		}
 
-		public void recursiv(final int indent, final LuaTable table, final HashSet<LuaValue> visited, final PrintStream out, final int maxindent) {
+		public void recursiv(final int indent, final LuaTable table, final HashSet<LuaValue> visited, final int maxindent) {
 			if (visited.contains(table)) {
 				return;
 			}
@@ -262,11 +270,11 @@ public class TableLib extends TwoArgFunction {
 				formatting.append(k);
 				formatting.append(":");
 				if (v.istable()) {
-					out.println(formatting);
-					this.recursiv(indent + 1, v.checktable(), visited, out, maxindent);
+					TableLib.this.globals.consoleQueue.add(formatting.toString());
+					this.recursiv(indent + 1, v.checktable(), visited, maxindent);
 				} else {
 					formatting.append(v);
-					out.println(formatting);
+					TableLib.this.globals.consoleQueue.add(formatting.toString());
 				}
 
 			}

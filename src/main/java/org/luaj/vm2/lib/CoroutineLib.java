@@ -73,12 +73,7 @@ public class CoroutineLib extends TwoArgFunction {
 	public LuaValue call(final LuaValue modname, final LuaValue env) {
 		this.globals = env.checkglobals();
 		final LuaTable coroutine = new LuaTable();
-		// coroutine.set("create", new create());
-		// coroutine.set("resume", new resume());
-		// coroutine.set("running", new running());
-		// coroutine.set("status", new status());
 		coroutine.set("yield", new yield());
-		// coroutine.set("wrap", new wrap());
 		env.set("coroutine", coroutine);
 		env.get("package").get("loaded").set("coroutine", coroutine);
 		return coroutine;

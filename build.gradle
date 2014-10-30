@@ -23,7 +23,6 @@ group = "org.hardluaj"
 
 repositories {
 	mavenCentral()
-
 	maven { url "https://oss.sonatype.org/content/groups/public"}
 }
 
@@ -49,3 +48,7 @@ uploadArchives {
 		 }
 	}
 }	
+
+dependencies {
+	compile group: 'org.apache.commons' ,name:'commons-collections4', version:'latest.release', changing: true
+}

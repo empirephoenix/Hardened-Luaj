@@ -29,7 +29,6 @@ import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.jse.JseBaseLib;
 
 /**
  * Subclass of {@link LibFunction} which implements the lua standard package and module library functions.
