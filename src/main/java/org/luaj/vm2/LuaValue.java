@@ -41,8 +41,7 @@ package org.luaj.vm2;
  * }
  * </pre>
  * 
- * Note that in this example, c will be a {@link LuaDouble}, but would be a {@link LuaInteger} if the value of a were changed to 8, say. In general the value of c in practice will vary depending on both the types and values of a and b as well as any
- * metatable/metatag processing that occurs.
+ * Note that in this example, c will be a {@link LuaDouble}, but would be a {@link LuaInteger} if the value of a were changed to 8, say. In general the value of c in practice will vary depending on both the types and values of a and b as well as any metatable/metatag processing that occurs.
  * <p>
  * Field access and function calls are similar, with common overloads to simplify Java usage:
  * 
@@ -86,8 +85,7 @@ package org.luaj.vm2;
  * 
  * For this to work the file must be in the current directory, or in the class path, dependening on the platform. See {@link JsePlatform} and {@link JmePlatform} for details.
  * <p>
- * In general a {@link LuaError} may be thrown on any operation when the types supplied to any operation are illegal from a lua perspective. Examples could be attempting to concatenate a NIL value, or attempting arithmetic on values that are not
- * number.
+ * In general a {@link LuaError} may be thrown on any operation when the types supplied to any operation are illegal from a lua perspective. Examples could be attempting to concatenate a NIL value, or attempting arithmetic on values that are not number.
  * <p>
  * There are several methods for preinitializing tables, such as:
  * <ul>
@@ -96,11 +94,9 @@ package org.luaj.vm2;
  * <li>{@link #tableOf(LuaValue[], LuaValue[], Varargs)} for mixtures</li>
  * </ul>
  * <p>
- * Predefined constants exist for the standard lua type constants {@link TNIL}, {@link TBOOLEAN}, {@link TLIGHTUSERDATA}, {@link TNUMBER}, {@link TSTRING}, {@link TTABLE}, {@link TFUNCTION}, {@link TUSERDATA}, {@link TTHREAD}, and extended lua type
- * constants {@link TINT}, {@link TNONE}, {@link TVALUE}
+ * Predefined constants exist for the standard lua type constants {@link TNIL}, {@link TBOOLEAN}, {@link TLIGHTUSERDATA}, {@link TNUMBER}, {@link TSTRING}, {@link TTABLE}, {@link TFUNCTION}, {@link TUSERDATA}, {@link TTHREAD}, and extended lua type constants {@link TINT}, {@link TNONE}, {@link TVALUE}
  * <p>
- * Predefined constants exist for all strings used as metatags: {@link INDEX}, {@link NEWINDEX}, {@link CALL}, {@link MODE}, {@link METATABLE}, {@link ADD}, {@link SUB}, {@link DIV}, {@link MUL}, {@link POW}, {@link MOD}, {@link UNM}, {@link LEN},
- * {@link EQ}, {@link LT}, {@link LE}, {@link TOSTRING}, and {@link CONCAT}.
+ * Predefined constants exist for all strings used as metatags: {@link INDEX}, {@link NEWINDEX}, {@link CALL}, {@link MODE}, {@link METATABLE}, {@link ADD}, {@link SUB}, {@link DIV}, {@link MUL}, {@link POW}, {@link MOD}, {@link UNM}, {@link LEN}, {@link EQ}, {@link LT}, {@link LE}, {@link TOSTRING}, and {@link CONCAT}.
  * 
  * @see JsePlatform
  * @see JmePlatform
@@ -1276,8 +1272,7 @@ abstract public class LuaValue extends Varargs {
 	 *             if b is not true
 	 */
 	public static void assert_(final boolean b, final String msg) {
-		if (!b)
-			throw new LuaError(msg);
+		if (!b) throw new LuaError(msg);
 	}
 
 	/**
@@ -1954,8 +1949,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 0 arguments, including metatag processing, and return only the first return value.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument. and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument. and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * If the return value is a {@link Varargs}, only the 1st value will be returned. To get multiple values, use {@link #invoke()} instead.
 	 * <p>
@@ -1979,8 +1973,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 0 arguments, including metatag processing, and return only the first return value.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * If the return value is a {@link Varargs}, only the 1st value will be returned. To get multiple values, use {@link #invoke()} instead.
 	 * <p>
@@ -2004,8 +1997,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 1 argument, including metatag processing, and return only the first return value.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * If the return value is a {@link Varargs}, only the 1st value will be returned. To get multiple values, use {@link #invoke()} instead.
 	 * <p>
@@ -2031,8 +2023,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 1 argument, including metatag processing, and return only the first return value.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * If the return value is a {@link Varargs}, only the 1st value will be returned. To get multiple values, use {@link #invoke()} instead.
 	 * <p>
@@ -2058,8 +2049,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 2 arguments, including metatag processing, and return only the first return value.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * If the return value is a {@link Varargs}, only the 1st value will be returned. To get multiple values, use {@link #invoke()} instead.
 	 * <p>
@@ -2086,8 +2076,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 2 arguments, including metatag processing, and return only the first return value.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return only its first return value, dropping any others. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * If the return value is a {@link Varargs}, only the 1st value will be returned. To get multiple values, use {@link #invoke()} instead.
 	 * <p>
@@ -2266,8 +2255,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 0 arguments, including metatag processing, and retain all return values in a {@link Varargs}.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * To get a particular return value, us {@link Varargs#arg(int)}
 	 * <p>
@@ -2291,8 +2279,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 0 arguments, including metatag processing, and retain all return values in a {@link Varargs}.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * To get a particular return value, us {@link Varargs#arg(int)}
 	 * <p>
@@ -2316,8 +2303,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 1 argument, including metatag processing, and retain all return values in a {@link Varargs}.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * To get a particular return value, us {@link Varargs#arg(int)}
 	 * <p>
@@ -2343,8 +2329,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with variable arguments, including metatag processing, and retain all return values in a {@link Varargs}.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * To get a particular return value, us {@link Varargs#arg(int)}
 	 * <p>
@@ -2370,8 +2355,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with 1 argument, including metatag processing, and retain all return values in a {@link Varargs}.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * To get a particular return value, us {@link Varargs#arg(int)}
 	 * <p>
@@ -2398,8 +2382,7 @@ abstract public class LuaValue extends Varargs {
 	/**
 	 * Call named method on {@link this} with variable arguments, including metatag processing, and retain all return values in a {@link Varargs}.
 	 * <p>
-	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call
-	 * that.
+	 * Look up {@code this[name]} and if it is a {@link LuaFunction}, call it inserting {@link this} as an additional first argument, and return all return values as a {@link Varargs} instance. Otherwise, look for the {@link CALL} metatag and call that.
 	 * <p>
 	 * To get a particular return value, us {@link Varargs#arg(int)}
 	 * <p>
@@ -2487,13 +2470,6 @@ abstract public class LuaValue extends Varargs {
 		this.typerror("table or string");
 		return 0;
 	}
-
-	// object equality, used for key comparison
-	@Override
-	public boolean equals(final Object obj) {
-		return this == obj;
-	}
-
 	/**
 	 * Equals: Perform equality comparison with another value including metatag processing using {@link EQ}.
 	 * 
@@ -3078,8 +3054,7 @@ abstract public class LuaValue extends Varargs {
 		LuaValue h = this.metatag(tag);
 		if (h.isnil()) {
 			h = op2.metatag(tag);
-			if (h.isnil())
-				LuaValue.error("attempt to perform arithmetic " + tag + " on " + this.typename() + " and " + op2.typename());
+			if (h.isnil()) LuaValue.error("attempt to perform arithmetic " + tag + " on " + this.typename() + " and " + op2.typename());
 		}
 		return h.call(this, op2);
 	}
@@ -3111,8 +3086,7 @@ abstract public class LuaValue extends Varargs {
 	 */
 	protected LuaValue arithmtwith(final LuaValue tag, final double op1) {
 		final LuaValue h = this.metatag(tag);
-		if (h.isnil())
-			LuaValue.error("attempt to perform arithmetic " + tag + " on number and " + this.typename());
+		if (h.isnil()) LuaValue.error("attempt to perform arithmetic " + tag + " on number and " + this.typename());
 		return h.call(LuaValue.valueOf(op1), this);
 	}
 
@@ -3551,11 +3525,9 @@ abstract public class LuaValue extends Varargs {
 	 */
 	public LuaValue comparemt(final LuaValue tag, final LuaValue op1) {
 		LuaValue h = this.metatag(tag);
-		if (!h.isnil())
-			return h.call(this, op1);
+		if (!h.isnil()) return h.call(this, op1);
 		h = op1.metatag(tag);
-		if (!h.isnil())
-			return h.call(this, op1);
+		if (!h.isnil()) return h.call(this, op1);
 		return LuaValue.error("attempt to compare " + tag + " on " + this.typename() + " and " + op1.typename());
 	}
 
@@ -3691,8 +3663,7 @@ abstract public class LuaValue extends Varargs {
 	 */
 	public LuaValue concatmt(final LuaValue rhs) {
 		LuaValue h = this.metatag(LuaValue.CONCAT);
-		if (h.isnil() && (h = rhs.metatag(LuaValue.CONCAT)).isnil())
-			LuaValue.error("attempt to concatenate " + this.typename() + " and " + rhs.typename());
+		if (h.isnil() && (h = rhs.metatag(LuaValue.CONCAT)).isnil()) LuaValue.error("attempt to concatenate " + this.typename() + " and " + rhs.typename());
 		return h.call(this, rhs);
 	}
 
@@ -3896,8 +3867,7 @@ abstract public class LuaValue extends Varargs {
 	}
 
 	/**
-	 * Construct a {@link LuaTable} initialized with supplied named values and sequential elements. The named values will be assigned first, and the sequential elements will be assigned later, possibly overwriting named values at the same slot if
-	 * there are conflicts.
+	 * Construct a {@link LuaTable} initialized with supplied named values and sequential elements. The named values will be assigned first, and the sequential elements will be assigned later, possibly overwriting named values at the same slot if there are conflicts.
 	 * 
 	 * @param namedValues
 	 *            array of {@link LuaValue} containing the keys and values to use in initialization in order {@code key-a, value-a, key-b, value-b, ...}
@@ -3910,8 +3880,7 @@ abstract public class LuaValue extends Varargs {
 	}
 
 	/**
-	 * Construct a {@link LuaTable} initialized with supplied named values and sequential elements in an array part and as varargs. The named values will be assigned first, and the sequential elements will be assigned later, possibly overwriting
-	 * named values at the same slot if there are conflicts.
+	 * Construct a {@link LuaTable} initialized with supplied named values and sequential elements in an array part and as varargs. The named values will be assigned first, and the sequential elements will be assigned later, possibly overwriting named values at the same slot if there are conflicts.
 	 * 
 	 * @param namedValues
 	 *            array of {@link LuaValue} containing the keys and values to use in initialization in order {@code key-a, value-a, key-b, value-b, ...}
@@ -3970,12 +3939,9 @@ abstract public class LuaValue extends Varargs {
 		do {
 			if (t.istable()) {
 				final LuaValue res = t.rawget(key);
-				if ((!res.isnil()) || (tm = t.metatag(LuaValue.INDEX)).isnil())
-					return res;
-			} else if ((tm = t.metatag(LuaValue.INDEX)).isnil())
-				t.indexerror();
-			if (tm.isfunction())
-				return tm.call(t, key);
+				if ((!res.isnil()) || (tm = t.metatag(LuaValue.INDEX)).isnil()) return res;
+			} else if ((tm = t.metatag(LuaValue.INDEX)).isnil()) t.indexerror();
+			if (tm.isfunction()) return tm.call(t, key);
 			t = tm;
 		} while (++loop < LuaValue.MAXTAGLOOP);
 		LuaValue.error("loop in gettable");
@@ -4004,8 +3970,7 @@ abstract public class LuaValue extends Varargs {
 					t.rawset(key, value);
 					return true;
 				}
-			} else if ((tm = t.metatag(LuaValue.NEWINDEX)).isnil())
-				t.typerror("index");
+			} else if ((tm = t.metatag(LuaValue.NEWINDEX)).isnil()) t.typerror("index");
 			if (tm.isfunction()) {
 				tm.call(t, key, value);
 				return true;
@@ -4027,8 +3992,7 @@ abstract public class LuaValue extends Varargs {
 	 */
 	public LuaValue metatag(final LuaValue tag) {
 		final LuaValue mt = this.getmetatable();
-		if (mt == null)
-			return LuaValue.NIL;
+		if (mt == null) return LuaValue.NIL;
 		return mt.rawget(tag);
 	}
 
@@ -4045,8 +4009,7 @@ abstract public class LuaValue extends Varargs {
 	 */
 	protected LuaValue checkmetatag(final LuaValue tag, final String reason) {
 		final LuaValue h = this.metatag(tag);
-		if (h.isnil())
-			throw new LuaError(reason + this.typename());
+		if (h.isnil()) throw new LuaError(reason + this.typename());
 		return h;
 	}
 
@@ -4315,10 +4278,8 @@ abstract public class LuaValue extends Varargs {
 	 */
 	@Override
 	public Varargs subargs(final int start) {
-		if (start == 1)
-			return this;
-		if (start > 1)
-			return LuaValue.NONE;
+		if (start == 1) return this;
+		if (start > 1) return LuaValue.NONE;
 		return LuaValue.argerror(1, "start must be > 0");
 	}
 
