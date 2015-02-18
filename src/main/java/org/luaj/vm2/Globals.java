@@ -23,12 +23,11 @@ package org.luaj.vm2;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.io.Reader;
 import java.util.HashSet;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.BaseLib;
 import org.luaj.vm2.lib.DebugLib;
@@ -106,7 +105,8 @@ import org.luaj.vm2.lib.ResourceFinder;
  * <li>"_VERSION" String containing the version of luaj.
  * </ul>
  * 
- * <h3>Use in Multithreaded Environments</h3> In a multi-threaded server environment, each server thread should create one Globals instance, which will be logically distinct and not interfere with each other, but share certain static immutable resources such as class data and string data.
+ * <h3>Use in Multithreaded Environments</h3> In a multi-threaded server environment, each server thread should create one Globals instance, which will be logically distinct and not interfere with each other, but share certain static immutable
+ * resources such as class data and string data.
  * <p>
  * 
  * @see org.luaj.vm2.lib.jse.JsePlatform
@@ -120,23 +120,23 @@ import org.luaj.vm2.lib.ResourceFinder;
  * @see LuaJC
  */
 public class Globals extends LuaTable {
-	
-	public CircularFifoQueue<String> consoleQueue = new CircularFifoQueue<String>(64);
-	
+
+	public BlockingQueue<String>	consoleQueue	= new LinkedBlockingQueue<String>(32);
+
 	/** The installed ResourceFinder for looking files by name. */
-	public ResourceFinder	finder;
+	public ResourceFinder			finder;
 
 	/** The currently running thread. Should not be changed by non-library code. */
-	public LuaThread		running	= new LuaThread(this);
+	public LuaThread				running			= new LuaThread(this);
 
 	/** The BaseLib instance loaded into this Globals */
-	public BaseLib			baselib;
+	public BaseLib					baselib;
 
 	/** The PackageLib instance loaded into this Globals */
-	public PackageLib		package_;
+	public PackageLib				package_;
 
 	/** The DebugLib instance loaded into this Globals, or null if debugging is not enabled */
-	public DebugLib			debuglib;
+	public DebugLib					debuglib;
 
 	/** Interface for module that converts a Prototype into a LuaFunction with an environment. */
 	public interface Loader {
@@ -252,7 +252,8 @@ public class Globals extends LuaTable {
 	}
 
 	/**
-	 * Load lua source or lua binary from an input stream into a Prototype. The InputStream is either a binary lua chunk starting with the lua binary chunk signature, or a text input file. If it is a text input file, it is interpreted as a UTF-8 byte sequence.
+	 * Load lua source or lua binary from an input stream into a Prototype. The InputStream is either a binary lua chunk starting with the lua binary chunk signature, or a text input file. If it is a text input file, it is interpreted as a UTF-8 byte
+	 * sequence.
 	 */
 	public Prototype loadPrototype(InputStream is, final String chunkname, final String mode) throws IOException {
 		if (mode.indexOf('b') >= 0) {
@@ -428,7 +429,8 @@ public class Globals extends LuaTable {
 	}
 
 	/**
-	 * Simple buffered InputStream that supports mark. Used to examine an InputStream for a 4-byte binary lua signature, and fall back to text input when the signature is not found, as well as speed up normal compilation and reading of lua scripts. This class may be moved to its own package in the future.
+	 * Simple buffered InputStream that supports mark. Used to examine an InputStream for a 4-byte binary lua signature, and fall back to text input when the signature is not found, as well as speed up normal compilation and reading of lua scripts.
+	 * This class may be moved to its own package in the future.
 	 */
 	static class BufferedStream extends AbstractBufferedStream {
 		private final InputStream	s;
@@ -495,7 +497,6 @@ public class Globals extends LuaTable {
 	}
 
 	public int getUsedMemory() {
-		final int totalsize = 0;
 		final HashSet<LuaValue> visited = new HashSet<>();
 		return this.getSizeOfObject(this, visited);
 	}
@@ -557,5 +558,11 @@ public class Globals extends LuaTable {
 			System.out.println("Unknown type " + value.getClass());
 		}
 		return 0;
+	}
+
+	public void console(final String toConsole) {
+		while (!this.consoleQueue.offer(toConsole)) {
+			this.yield(LuaValue.NIL);
+		}
 	}
 }

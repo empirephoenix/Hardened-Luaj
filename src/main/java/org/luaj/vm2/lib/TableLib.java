@@ -64,16 +64,16 @@ import org.luaj.vm2.Varargs;
  * @see <a href="http://www.lua.org/manual/5.2/manual.html#6.5">Lua 5.2 Table Lib Reference</a>
  */
 public class TableLib extends TwoArgFunction {
-	private static final concat CONCAT_FUNCTION = new concat();
-	private static final insert INSERT_FUNCTION = new insert();
-	private static final pack PACK_FUNCTION = new pack();
-	private static final remove REMOVE_FUNCTION = new remove();
-	private static final sort SORT_FUNCTION = new sort();
-	private static final getn GETN_FUNCTION = new getn();
-	private static final clear CLEAR_FUNCTION = new clear();
-	private static final unpack UNPACK_FUNCTION = new unpack();
-	private static final contains CONTAINS_FUNCTION = new contains();
-	private Globals globals;
+	private static final concat		CONCAT_FUNCTION		= new concat();
+	private static final insert		INSERT_FUNCTION		= new insert();
+	private static final pack		PACK_FUNCTION		= new pack();
+	private static final remove		REMOVE_FUNCTION		= new remove();
+	private static final sort		SORT_FUNCTION		= new sort();
+	private static final getn		GETN_FUNCTION		= new getn();
+	private static final clear		CLEAR_FUNCTION		= new clear();
+	private static final unpack		UNPACK_FUNCTION		= new unpack();
+	private static final contains	CONTAINS_FUNCTION	= new contains();
+	private Globals					globals;
 
 	public TableLib(final Globals globals) {
 		this.globals = globals;
@@ -82,16 +82,16 @@ public class TableLib extends TwoArgFunction {
 	@Override
 	public LuaValue call(final LuaValue modname, final LuaValue env) {
 		final LuaTable table = new LuaTable();
-		table.set("concat", CONCAT_FUNCTION);
-		table.set("insert", INSERT_FUNCTION);
-		table.set("pack", PACK_FUNCTION);
-		table.set("remove", REMOVE_FUNCTION);
-		table.set("sort", SORT_FUNCTION);
+		table.set("concat", TableLib.CONCAT_FUNCTION);
+		table.set("insert", TableLib.INSERT_FUNCTION);
+		table.set("pack", TableLib.PACK_FUNCTION);
+		table.set("remove", TableLib.REMOVE_FUNCTION);
+		table.set("sort", TableLib.SORT_FUNCTION);
 		table.set("print", new print());
-		table.set("getn", GETN_FUNCTION);
-		table.set("clear", CLEAR_FUNCTION);
-		table.set("unpack", UNPACK_FUNCTION);
-		table.set("contains", CONTAINS_FUNCTION);
+		table.set("getn", TableLib.GETN_FUNCTION);
+		table.set("clear", TableLib.CLEAR_FUNCTION);
+		table.set("unpack", TableLib.UNPACK_FUNCTION);
+		table.set("contains", TableLib.CONTAINS_FUNCTION);
 		env.set("table", table);
 		env.get("package").get("loaded").set("table", table);
 		return LuaValue.NIL;
@@ -270,11 +270,11 @@ public class TableLib extends TwoArgFunction {
 				formatting.append(k);
 				formatting.append(":");
 				if (v.istable()) {
-					TableLib.this.globals.consoleQueue.add(formatting.toString());
+					TableLib.this.globals.console(formatting.toString());
 					this.recursiv(indent + 1, v.checktable(), visited, maxindent);
 				} else {
 					formatting.append(v);
-					TableLib.this.globals.consoleQueue.add(formatting.toString());
+					TableLib.this.globals.console(formatting.toString());
 				}
 
 			}

@@ -35,7 +35,8 @@ import org.luaj.vm2.Varargs;
 /**
  * Subclass of {@link LibFunction} which implements the lua basic library functions.
  * <p>
- * This contains all library functions listed as "basic functions" in the lua documentation for JME. The functions dofile and loadfile use the {@link #finder} instance to find resource files. Since JME has no file system by default, {@link BaseLib} implements {@link ResourceFinder} using {@link Class#getResource(String)}, which is the closest equivalent on JME. The default loader chain in {@link PackageLib} will use these as well.
+ * This contains all library functions listed as "basic functions" in the lua documentation for JME. The functions dofile and loadfile use the {@link #finder} instance to find resource files. Since JME has no file system by default, {@link BaseLib}
+ * implements {@link ResourceFinder} using {@link Class#getResource(String)}, which is the closest equivalent on JME. The default loader chain in {@link PackageLib} will use these as well.
  * <p>
  * To use basic library functions that include a {@link ResourceFinder} based on directory lookup, use {@link JseBaseLib} instead.
  * <p>
@@ -74,23 +75,23 @@ import org.luaj.vm2.Varargs;
  */
 public abstract class BaseLib extends TwoArgFunction implements ResourceFinder {
 
-	private static final ipairs IPAIRS_FUNCTION = new ipairs();
-	private static final org.luaj.vm2.lib.BaseLib.next NEXT_FUNCTION = new next();
-	private static final pairs PAIRS_FUNCTION = new pairs(NEXT_FUNCTION);
-	private static final type TYPE_FUNCTION = new type();
-	private static final tostring TOSTRING_FUNCTION = new tostring();
-	private static final tonumber TONUMBER_FUNCTION = new tonumber();
-	private static final setmetatable SETMETATABLE_FUNCTION = new setmetatable();
-	private static final select SELECT_FUNCTION = new select();
-	private static final rawset RAWSET_FUNCTION = new rawset();
-	private static final rawlen RAWLEN_FUNCTION = new rawlen();
-	private static final rawget RAWGET_FUNCTION = new rawget();
-	private static final rawequal RAWEQUAL_FUNCTION = new rawequal();
-	private static final pcall PCALL_FUNCTION = new pcall();
-	private static final getmetatable GETMETATABLE_FUNCTION = new getmetatable();
-	private static final error ERROR_FUNCTION = new error();
-	private static final _assert ASSERT_FUNCTION = new _assert();
-	Globals globals;
+	private static final ipairs							IPAIRS_FUNCTION			= new ipairs();
+	private static final org.luaj.vm2.lib.BaseLib.next	NEXT_FUNCTION			= new next();
+	private static final pairs							PAIRS_FUNCTION			= new pairs(BaseLib.NEXT_FUNCTION);
+	private static final type							TYPE_FUNCTION			= new type();
+	private static final tostring						TOSTRING_FUNCTION		= new tostring();
+	private static final tonumber						TONUMBER_FUNCTION		= new tonumber();
+	private static final setmetatable					SETMETATABLE_FUNCTION	= new setmetatable();
+	private static final select							SELECT_FUNCTION			= new select();
+	private static final rawset							RAWSET_FUNCTION			= new rawset();
+	private static final rawlen							RAWLEN_FUNCTION			= new rawlen();
+	private static final rawget							RAWGET_FUNCTION			= new rawget();
+	private static final rawequal						RAWEQUAL_FUNCTION		= new rawequal();
+	private static final pcall							PCALL_FUNCTION			= new pcall();
+	private static final getmetatable					GETMETATABLE_FUNCTION	= new getmetatable();
+	private static final error							ERROR_FUNCTION			= new error();
+	private static final _assert						ASSERT_FUNCTION			= new _assert();
+	Globals												globals;
 
 	@Override
 	public LuaValue call(final LuaValue modname, final LuaValue env) {
@@ -99,25 +100,25 @@ public abstract class BaseLib extends TwoArgFunction implements ResourceFinder {
 		this.globals.baselib = this;
 		env.set("_G", env);
 		env.set("_VERSION", Lua._VERSION);
-		env.set("assert", ASSERT_FUNCTION);
-		env.set("error", ERROR_FUNCTION);
-		env.set("getmetatable", GETMETATABLE_FUNCTION);
-		env.set("pcall", PCALL_FUNCTION);
+		env.set("assert", BaseLib.ASSERT_FUNCTION);
+		env.set("error", BaseLib.ERROR_FUNCTION);
+		env.set("getmetatable", BaseLib.GETMETATABLE_FUNCTION);
+		env.set("pcall", BaseLib.PCALL_FUNCTION);
 		env.set("print", new print(this));
-		env.set("rawequal", RAWEQUAL_FUNCTION);
-		env.set("rawget", RAWGET_FUNCTION);
-		env.set("rawlen", RAWLEN_FUNCTION);
-		env.set("rawset", RAWSET_FUNCTION);
-		env.set("select", SELECT_FUNCTION);
-		env.set("setmetatable", SETMETATABLE_FUNCTION);
-		env.set("tonumber", TONUMBER_FUNCTION);
-		env.set("tostring", TOSTRING_FUNCTION);
-		env.set("type", TYPE_FUNCTION);
+		env.set("rawequal", BaseLib.RAWEQUAL_FUNCTION);
+		env.set("rawget", BaseLib.RAWGET_FUNCTION);
+		env.set("rawlen", BaseLib.RAWLEN_FUNCTION);
+		env.set("rawset", BaseLib.RAWSET_FUNCTION);
+		env.set("select", BaseLib.SELECT_FUNCTION);
+		env.set("setmetatable", BaseLib.SETMETATABLE_FUNCTION);
+		env.set("tonumber", BaseLib.TONUMBER_FUNCTION);
+		env.set("tostring", BaseLib.TOSTRING_FUNCTION);
+		env.set("type", BaseLib.TYPE_FUNCTION);
 		env.set("xpcall", new xpcall());
 
-		env.set("next", NEXT_FUNCTION);
-		env.set("pairs", PAIRS_FUNCTION);
-		env.set("ipairs", IPAIRS_FUNCTION);
+		env.set("next", BaseLib.NEXT_FUNCTION);
+		env.set("pairs", BaseLib.PAIRS_FUNCTION);
+		env.set("ipairs", BaseLib.IPAIRS_FUNCTION);
 
 		return env;
 	}
@@ -177,7 +178,7 @@ public abstract class BaseLib extends TwoArgFunction implements ResourceFinder {
 
 	// "print", // (...) -> void
 	final class print extends VarArgFunction {
-		final BaseLib baselib;
+		final BaseLib	baselib;
 
 		print(final BaseLib baselib) {
 			this.baselib = baselib;
@@ -188,7 +189,7 @@ public abstract class BaseLib extends TwoArgFunction implements ResourceFinder {
 			final LuaValue tostring = BaseLib.this.globals.get("tostring");
 			for (int i = 1, n = args.narg(); i <= n; i++) {
 				final LuaString s = tostring.call(args.arg(i)).strvalue();
-				BaseLib.this.globals.consoleQueue.add(s.tojstring());
+				BaseLib.this.globals.console(s.tojstring());
 			}
 			return LuaValue.NONE;
 		}
@@ -367,7 +368,7 @@ public abstract class BaseLib extends TwoArgFunction implements ResourceFinder {
 
 	// "pairs" (t) -> iter-func, t, nil
 	static final class pairs extends VarArgFunction {
-		final next next;
+		final next	next;
 
 		pairs(final next next) {
 			this.next = next;
@@ -381,7 +382,7 @@ public abstract class BaseLib extends TwoArgFunction implements ResourceFinder {
 
 	// // "ipairs", // (t) -> iter-func, t, 0
 	static final class ipairs extends VarArgFunction {
-		inext inext = new inext();
+		inext	inext	= new inext();
 
 		@Override
 		public Varargs invoke(final Varargs args) {
