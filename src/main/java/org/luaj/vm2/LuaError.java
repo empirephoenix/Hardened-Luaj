@@ -77,7 +77,7 @@ public class LuaError extends RuntimeException {
 	 *            message to supply
 	 */
 	public LuaError(final String message) {
-		super(message);
+		super(message, null, false, false);
 		this.level = 1;
 	}
 
@@ -90,7 +90,7 @@ public class LuaError extends RuntimeException {
 	 *            where to supply line info from in call stack
 	 */
 	public LuaError(final String message, final int level) {
-		super(message);
+		super(message, null, false, false);
 		this.level = level;
 	}
 
