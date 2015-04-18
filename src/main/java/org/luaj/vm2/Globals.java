@@ -247,7 +247,8 @@ public class Globals extends LuaTable {
 		} catch (final LuaError l) {
 			throw l;
 		} catch (final Exception e) {
-			return LuaValue.error("load " + chunkname + ": " + e);
+			final LuaError repeat = LuaClosure.logException(e);
+			throw new LuaError("load " + chunkname + ": ", repeat);
 		}
 	}
 

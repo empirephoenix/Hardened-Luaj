@@ -94,6 +94,10 @@ public class LuaError extends RuntimeException {
 		this.level = level;
 	}
 
+	public LuaError(final String message, final Throwable cause) {
+		super(message, cause, false, false);
+	}
+
 	/**
 	 * Get the cause, if any.
 	 */
