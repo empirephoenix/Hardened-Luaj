@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * Extension of {@link LuaFunction} which executes lua bytecode.
  * <p>
  * A {@link LuaClosure} is a combination of a {@link Prototype} and a {@link LuaValue} to use as an environment for execution. Normally the {@link LuaValue} is a {@link Globals} in which case the environment will contain standard lua libraries.
- * 
+ *
  * <p>
  * There are three main ways {@link LuaClosure} instances are created:
  * <ul>
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  * <p>
  * To construct it directly, the {@link Prototype} is typically created via a compiler such as {@link LuaC}:
- * 
+ *
  * <pre>
  * {
  * 	&#064;code
@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  * </pre>
  * <p>
  * To construct it indirectly, the {@link Globals#load} method may be used:
- * 
+ *
  * <pre>
  * {
  * 	&#064;code
@@ -78,7 +78,7 @@ import org.slf4j.LoggerFactory;
  * <li>{@link LuaValue#invokemethod(String,Varargs)}</li>
  * <li>...</li>
  * </ul>
- * 
+ *
  * @see LuaValue
  * @see LuaFunction
  * @see LuaValue#isclosure()
@@ -102,7 +102,7 @@ public class LuaClosure extends LuaFunction {
 
 	/**
 	 * Create a closure around a Prototype with a specific environment. If the prototype has upvalues, the environment will be written into the first upvalue.
-	 * 
+	 *
 	 * @param p
 	 *            the Prototype to construct this Closure for.
 	 * @param env
@@ -612,7 +612,7 @@ public class LuaClosure extends LuaFunction {
 				this.processErrorHooks(le, this.p, pc);
 			}
 			throw le;
-		} catch (final Exception e) {
+		} catch (final Throwable e) {
 			final LuaError repeat = LuaClosure.logException(e);
 			this.processErrorHooks(repeat, this.p, pc);
 			throw repeat;
@@ -630,7 +630,7 @@ public class LuaClosure extends LuaFunction {
 		}
 	}
 
-	public static LuaError logException(final Exception e) {
+	public static LuaError logException(final Throwable e) {
 		final String errorId = System.currentTimeMillis() + "-" + e.hashCode();
 		LuaClosure.logger.error("Unhandled Api Exception {} : {}", errorId, e);
 		return new LuaError("Internal API Error: id=" + errorId);
@@ -638,7 +638,7 @@ public class LuaClosure extends LuaFunction {
 
 	/**
 	 * Run the error hook if there is one
-	 * 
+	 *
 	 * @param msg
 	 *            the message to use in error hook processing.
 	 * */
