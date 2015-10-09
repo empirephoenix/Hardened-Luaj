@@ -196,7 +196,8 @@ public class Globals extends LuaTable {
 		try {
 			return this.load(this.finder.findResource(filename), "@" + filename, "t", this);
 		} catch (final Exception e) {
-			return LuaValue.error("load " + filename + ": " + e);
+			final LuaError repeat = LuaClosure.logException(e);
+			throw new LuaError("load " + filename + ": ", repeat);
 		}
 	}
 

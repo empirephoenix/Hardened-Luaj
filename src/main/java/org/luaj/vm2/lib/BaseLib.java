@@ -25,6 +25,7 @@ import java.io.InputStream;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.Lua;
+import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaTable;
@@ -170,8 +171,9 @@ public abstract class BaseLib extends TwoArgFunction implements ResourceFinder {
 				final String m = le.getMessage();
 				return LuaValue.varargsOf(LuaValue.FALSE, m != null ? LuaValue.valueOf(m) : LuaValue.NIL);
 			} catch (final Exception e) {
-				final String m = e.getMessage();
-				return LuaValue.varargsOf(LuaValue.FALSE, LuaValue.valueOf(m != null ? m : e.toString()));
+				final LuaError repeat = LuaClosure.logException(e);
+				final String m = repeat.getMessage();
+				return LuaValue.varargsOf(LuaValue.FALSE, LuaValue.valueOf(m != null ? m : repeat.toString()));
 			}
 		}
 	}
@@ -353,8 +355,10 @@ public abstract class BaseLib extends TwoArgFunction implements ResourceFinder {
 					final String m = le.getMessage();
 					return LuaValue.varargsOf(LuaValue.FALSE, m != null ? LuaValue.valueOf(m) : LuaValue.NIL);
 				} catch (final Exception e) {
-					final String m = e.getMessage();
-					return LuaValue.varargsOf(LuaValue.FALSE, LuaValue.valueOf(m != null ? m : e.toString()));
+					final LuaError repeat = LuaClosure.logException(e);
+
+					final String m = repeat.getMessage();
+					return LuaValue.varargsOf(LuaValue.FALSE, LuaValue.valueOf(m != null ? m : repeat.toString()));
 				} finally {
 					if (BaseLib.this.globals != null && BaseLib.this.globals.debuglib != null) {
 						BaseLib.this.globals.debuglib.onReturn();
